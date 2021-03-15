@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock title %}
+
+{% block content %}
+<div>
+    <h1>
+        All Posts Here {{ current_user.username }}
+    </h1>
+
+    <a href="{{ url_for('blog.create') }}" class="btn btn-primary btn-sm">
+        Add New Post
+    </a>
+</div>
+<hr>
+
+<div class="row">
+
+    {% for post in posts %}
+    <div class="container col-md-5 alert alert-warning">
+        <h3 class="text-dark">
+            <a class="navbar-brand" href="#">
+                {{ post.title }}
+            </a>
+        </h3>
+
+        <h4>
+            {{ post.content[:20] }}
+        </h4>
+        <br>
+
+        <h6>
+            {{ post.publication_datetime|strftime}}
+        </h6>
+        {% for user in users %}
+        {% if user.id == post.author_id %}
+        <h5>
+            Post from user: {{ user.username }}
+        </h5>
+        {% endif %}
+        {% endfor %}
+
+        {% if current_user.id == post['author_id'] %}
+        <div>
+            <a href="{{ url_for('blog.update', id=post['id']) }}" class="btn btn-outline-warning btn-sm">
+                Update
+            </a>
+            <a href="{{ url_for('blog.delete', id=post['id']) }}" class="btn btn-outline-danger btn-sm">
+                Delete
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock content %}
