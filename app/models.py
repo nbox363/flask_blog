@@ -3,7 +3,7 @@ from flask_login import UserMixin
 from . import db
 
 
-class User(UserMixin, db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True,
                       nullable=False)
@@ -20,7 +20,8 @@ class Post(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'),
                           nullable=False)
     title = db.Column(db.String(80), nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text,
+                        nullable=False)
     publication_datetime = db.Column(db.DateTime, nullable=False,
                                      default=datetime.utcnow)
 
@@ -34,8 +35,10 @@ class Comment(db.Model):
                         nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'),
                           nullable=False)
-    title = db.Column(db.String(80), nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    title = db.Column(db.String(80),
+                      nullable=False)
+    content = db.Column(db.Text,
+                        nullable=False)
     publication_datetime = db.Column(db.DateTime, nullable=False,
                                      default=datetime.utcnow)
 

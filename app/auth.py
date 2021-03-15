@@ -22,13 +22,8 @@ def register():
             return redirect(url_for('auth.register'))
 
         new_user = User(email=email, username=username, password=generate_password_hash(password))
-
         db.session.add(new_user)
-        try:
-            db.session.commit()
-        except:
-            flash('Something went wrong. Try again')
-            return redirect(url_for('auth.register'))
+        db.session.commit()
 
         return redirect(url_for('auth.login'))
 
@@ -57,4 +52,3 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('blog.index'))
-

@@ -1,8 +1,7 @@
+from dateutil import parser
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from dateutil import parser
-
 
 db = SQLAlchemy()
 
@@ -14,7 +13,6 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/db.db'
 
     db.init_app(app)
-
     with app.app_context():
         db.create_all()
 
@@ -40,6 +38,4 @@ def create_app():
         format = '%b %d, %Y'
         return native.strftime(format)
 
-
     return app
-

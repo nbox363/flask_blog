@@ -1,37 +1,30 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ title }}{% endblock title %}
+{% block title %}Blog{% endblock title %}
 
 {% block content %}
-<div>
-    <h1>
-        All Posts Here {{ current_user.username }}
-    </h1>
 
-    <a href="{{ url_for('blog.create') }}" class="btn btn-primary btn-sm">
-        Add New Post
-    </a>
-</div>
+{% if current_user.is_authenticated %}
+<h1>Hi {{ current_user.username }}</h1>
+{% else %}
+<h1>Hi nobody</h1>
+{% endif %}
+
+<a href="{{ url_for('blog.create') }}" class="btn btn-primary btn-sm">
+    Add New Post
+</a>
+
 <hr>
 
 <div class="row">
 
     {% for post in posts %}
-    <div class="container col-md-5 alert alert-warning">
-        <h3 class="text-dark">
-            <a class="navbar-brand" href="#">
-                {{ post.title }}
-            </a>
-        </h3>
+    <div class="container col-md-5 alert alert-secondary">
+        <h2 class="text-success">{{ post.title }}</h2>
 
-        <h4>
-            {{ post.content[:20] }}
-        </h4>
-        <br>
+        <h6>{{ post.content[:20] }}</h6>
 
-        <h6>
-            {{ post.publication_datetime|strftime}}
-        </h6>
+        <hr>
         {% for user in users %}
         {% if user.id == post.author_id %}
         <h5>
@@ -39,7 +32,7 @@
         </h5>
         {% endif %}
         {% endfor %}
-
+        <p>{{ post.publication_datetime|strftime}}</p>
         {% if current_user.id == post['author_id'] %}
         <div>
             <a href="{{ url_for('blog.update', id=post['id']) }}" class="btn btn-outline-warning btn-sm">
