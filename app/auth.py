@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, url_for, flash
 from flask_login import login_user, logout_user
+from sqlalchemy.exc import OperationalError
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 
@@ -15,7 +16,13 @@ def register():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        user = User.query.filter_by(email=email).first()
+        try:
+            user = User.query.filter_by(email=email).first()
+        except OperationalError:
+            new_user = User(email=email, username=username, password=generate_password_hash(password))
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('auth.login'))
 
         if user:
             flash('Email address already exists.')
