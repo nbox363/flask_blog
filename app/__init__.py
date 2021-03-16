@@ -13,7 +13,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS '] = True
     app.debug = True
-
+    app.run()
 
     db.init_app(app)
     with app.app_context():
