@@ -13,7 +13,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS '] = True
 
-    db.init_app(appg
+    db.init_app(app)
     with app.app_context():
         db.create_all()
 
@@ -39,4 +39,9 @@ def create_app():
         format = '%b %d, %Y'
         return native.strftime(format)
 
+    if __name__ == "__main__":
+        app.run(debug=True)
+
     return app
+
+
