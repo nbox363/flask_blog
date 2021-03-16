@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit "{{ comment['title'] }}"{% endblock %}
+
+{% block content %}
+<div class="container col-md-7 border border-secondary p-5">
+    <form method="post">
+        <label for="title">Title</label>
+        <input type="text" name="title" class="form-control" value="{{ request.form['title'] or comment['title'] }}"
+               required>
+
+        <label for="content">Content</label>
+        <textarea name="content" class="form-control">{{ request.form['content'] or comment['content'] }}</textarea>
+
+        <button class="btn btn-secondary my-4 btn-block" type="submit">
+            Update
+        </button>
+    </form>
+</div>
+
+
+{% endblock %}

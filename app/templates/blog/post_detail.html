@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post['title'] }}{% endblock title %}
+
+{% block content %}
+<div class="container col-md-9 alert alert-primary">
+    <h1>
+        {{ post.title }}
+    </h1>
+    <div class="container">
+        <p style="word-wrap:break-word; width: 100%;">
+            {{ post.content }}
+        </p>
+    </div>
+    <h6>
+        {{ post.publication_datetime|strftime}}
+    </h6>
+
+    {% if current_user.id == post['author_id'] %}
+    <a href="{{ url_for('blog.update', id=post['id']) }}" class="btn btn-outline-warning btn-sm">
+        Update
+    </a>
+    <a href="{{ url_for('blog.delete', id=post['id']) }}" class="btn btn-outline-danger btn-sm">
+        Delete
+    </a>
+    {% endif %}
+    <hr>
+
+    {% for user in users %}
+    {% for comment in comments %}
+    {% if user.id == comment.author_id %}
+
+    <div class="card border-success mb-3" style="max-width: 18rem;">
+        <div class="card-header bg-transparent border-success">{{ user.username }}</div>
+        <div class="card-body text-success">
+            <h5 class="card-title">{{ comment.title }}</h5>
+            <p class="card-text">{{ comment.content }}</p>
+        </div>
+        <div class="card-footer bg-transparent border-success">
+            {% if current_user.id == comment['author_id'] %}
+            <a href="{{ url_for('blog.update_comment', id=comment['id']) }}" class="btn btn-outline-primary btn-sm">
+                Update
+            </a>
+            <a href="{{ url_for('blog.delete_comment', id=comment['id']) }}" class="btn btn-outline-primary btn-sm">
+                Delete
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+
+    <div class="container col-md-5">
+        <form class="text-center" method="post">
+            <label for="title">Add comment</label>
+            <input type="text" name="title" placeholder="Title" value="{{ request.form['title'] }}" required class="form-control">
+
+            <textarea name="content" placeholder="Comment" class="form-control">{{ request.form['content'] }}</textarea>
+
+            <button class="btn btn-secondary my-4 btn-block" type="submit">
+                Save
+            </button>
+        </form>
+    </div>
+    <h6>
+        <a class="navbar-brand" href="{{ url_for('blog.index') }}">
+            Back
+        </a>
+    </h6>
+</div>
+
+{% endblock content %}

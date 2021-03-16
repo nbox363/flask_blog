@@ -13,41 +13,47 @@
 <a href="{{ url_for('blog.create') }}" class="btn btn-primary btn-sm">
     Add New Post
 </a>
-
 <hr>
 
+
 <div class="row">
-
     {% for post in posts %}
-    <div class="container col-md-5 alert alert-secondary">
-        <h2 class="text-success">{{ post.title }}</h2>
+    {% for user in users %}
+    {% if user.id == post.author_id %}
+    <div class="card ml-3 mb-3">
+        <div class="card-body">
 
-        <h6>{{ post.content[:20] }}</h6>
+            <h5 class="card-title">
+                <a class="navbar-brand" href="{{ url_for('blog.post_detail', id=post['id']) }}">
+                    {{post.title[:50] }}
+                </a>
+            </h5>
 
-        <hr>
-        {% for user in users %}
-        {% if user.id == post.author_id %}
-        <h5>
-            Post from user: {{ user.username }}
-        </h5>
-        {% endif %}
-        {% endfor %}
-        <p>{{ post.publication_datetime|strftime}}</p>
-        {% if current_user.id == post['author_id'] %}
-        <div>
+            <h6 class="card-subtitle mb-2 text-muted">
+                Author: {{ user.username }}
+            </h6>
+
+            <p class="card-text">
+                {{ post.content[:50] }}
+            </p>
+
+            <p>
+                {{ post.publication_datetime|strftime}}
+            </p>
+
+            {% if current_user.id == post.author_id %}
             <a href="{{ url_for('blog.update', id=post['id']) }}" class="btn btn-outline-warning btn-sm">
                 Update
             </a>
             <a href="{{ url_for('blog.delete', id=post['id']) }}" class="btn btn-outline-danger btn-sm">
                 Delete
             </a>
+            {% endif %}
         </div>
-        {% endif %}
-
     </div>
-
+    {% endif %}
     {% endfor %}
-
+    {% endfor %}
 </div>
 
 {% endblock content %}
